@@ -1,1 +1,3 @@
-# comp3901-project
+# capstone
+
+A new Flutter project.
