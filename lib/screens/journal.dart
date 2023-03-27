@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mindspace/style/app_style.dart';
-import 'package:mindspace/model/list_model.dart';
+import 'package:capstone/style/app_style.dart';
+import 'package:capstone/model/list_model.dart';
 
 import '../components/note_list_data.dart';
 import 'add_entry/add_entry.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mindspace/screens/journal.dart';
+import 'package:capstone/screens/journal.dart';
+import 'package:capstone/screens/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: JournalScreen(),
+      home: LoginScreen(),
     );
   }
 }

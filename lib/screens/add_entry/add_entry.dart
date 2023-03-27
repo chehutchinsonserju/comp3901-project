@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:mindspace/model/list_model.dart';
-import 'package:mindspace/screens/journal.dart';
-import 'package:mindspace/style/app_style.dart';
+import 'package:capstone/model/list_model.dart';
+import 'package:capstone/screens/journal.dart';
+import 'package:capstone/style/app_style.dart';
 
 class AddEntry extends StatefulWidget {
   const AddEntry({super.key});

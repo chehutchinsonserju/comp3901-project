@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mindspace/style/app_style.dart';
+import 'package:capstone/style/app_style.dart';
 import 'dart:math';
 
 //temporary list of notes to implement until databse functionality is added
