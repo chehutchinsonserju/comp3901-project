@@ -1,3 +1,6 @@
+import 'package:capstone/components/bottom_navigation_bar.dart';
+import 'package:capstone/screens/journal.dart';
+import 'package:capstone/style/app_style.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -12,8 +15,33 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: MyBottomNavigationBar(
+        currentIndex: 2,
+        onTap: (int index) {
+          switch (index) {
+            case 0:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => JournalScreen()),
+              );
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => JournalScreen()),
+              );
+              break;
+            case 2:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChatScreen()),
+              );
+              break;
+          }
+        },
+      ),
       appBar: AppBar(
-        backgroundColor: Color(0xFF1D9AAD),
+        backgroundColor: AppStyle.mainColor,
         centerTitle: true,
         title: Text(
           "Chat",
@@ -41,7 +69,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         constraints: BoxConstraints(
                             maxWidth: MediaQuery.of(context).size.width * 0.75),
                         decoration: BoxDecoration(
-                          color: Color(0xFF1D9AAD),
+                          color: AppStyle.mainColor,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10),
                             topRight: Radius.circular(10),
@@ -93,7 +121,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: TextField(
                     controller: _textController,
                     decoration: InputDecoration(
-                      hintText: "Type your message",
+                      hintText: "Write a message",
                       border: InputBorder.none,
                     ),
                   ),

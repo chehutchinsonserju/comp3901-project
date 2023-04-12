@@ -1,2 +1,3 @@
-2023/03/26-19:56:33.578 40cc Creating DB C:\Users\tariq\AppData\Local\Temp\flutter_tools.f76ea534\flutter_tools_chrome_device.41ec2430\Default\shared_proto_db\metadata since it was missing.
-2023/03/26-19:56:33.635 40cc Reusing MANIFEST C:\Users\tariq\AppData\Local\Temp\flutter_tools.f76ea534\flutter_tools_chrome_device.41ec2430\Default\shared_proto_db\metadata/MANIFEST-000001
+2023/04/03-21:50:41.552 66f0 Reusing MANIFEST C:\Users\tariq\AppData\Local\Temp\flutter_tools.f71cc687\flutter_tools_chrome_device.13854949\Default\shared_proto_db\metadata/MANIFEST-000001
+2023/04/03-21:50:41.555 66f0 Recovering log #3
+2023/04/03-21:50:41.556 66f0 Reusing old log C:\Users\tariq\AppData\Local\Temp\flutter_tools.f71cc687\flutter_tools_chrome_device.13854949\Default\shared_proto_db\metadata/000003.log 

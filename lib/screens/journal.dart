@@ -1,3 +1,5 @@
+import 'package:capstone/components/bottom_navigation_bar.dart';
+import 'package:capstone/screens/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/style/app_style.dart';
 import 'package:capstone/model/list_model.dart';
@@ -17,21 +19,31 @@ class _JournalScreenState extends State<JournalScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppStyle.backgroundColor,
-      bottomNavigationBar:
-          BottomNavigationBar(items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.book),
-          label: 'Journal',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat_bubble),
-          label: 'Chat',
-        ),
-      ]),
+      bottomNavigationBar: MyBottomNavigationBar(
+        currentIndex: 0,
+        onTap: (int index) {
+          switch (index) {
+            case 0:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => JournalScreen()),
+              );
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => JournalScreen()),
+              );
+              break;
+            case 2:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChatScreen()),
+              );
+              break;
+          }
+        },
+      ),
       appBar: AppBar(
         elevation: 0.0,
         title: Text('Journal'),
