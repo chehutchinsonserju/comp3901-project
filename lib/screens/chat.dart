@@ -2,6 +2,12 @@ import 'package:capstone/components/bottom_navigation_bar.dart';
 import 'package:capstone/screens/journal.dart';
 import 'package:capstone/style/app_style.dart';
 import 'package:flutter/material.dart';
+import 'package:dialogflow_grpc/dialogflow_grpc.dart';
+import 'package:dialogflow_grpc/generated/google/cloud/dialogflow/v2beta1/session.pb.dart';
+import 'package:flutter/services.dart';
+
+late DialogflowGrpcV2Beta1 dialogflow;
+late String sessionId;
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -9,8 +15,57 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  TextEditingController _textController = TextEditingController();
-  List<Map<String, dynamic>> _messages = [];
+  final TextEditingController _textController = TextEditingController();
+  final List<ChatMessage> _messages = <ChatMessage>[];
+
+
+  @override
+  void initState() {
+    super.initState();
+    initPlugin();
+  }
+
+  Future<void> initPlugin() async {
+
+    // TODO Get a Service account
+    // Get a Service account
+    final serviceAccount = ServiceAccount.fromString(
+        '${(await rootBundle.loadString('assets/credentials.json'))}');
+    // Create a DialogflowGrpc Instance
+    dialogflow = DialogflowGrpcV2Beta1.viaServiceAccount(serviceAccount);
+
+  }
+
+  void handleSubmitted(text) async {
+    print(text);
+    _textController.clear();
+
+
+    ChatMessage message = ChatMessage(
+      text: text,
+      name: "You",
+      type: true,
+    );
+
+    setState(() {
+      _messages.insert(0, message);
+    });
+
+    DetectIntentResponse data = await dialogflow.detectIntent(text, 'en-US');
+    String fulfillmentText = data.queryResult.fulfillmentText;
+    if(fulfillmentText.isNotEmpty) {
+      ChatMessage botMessage = ChatMessage(
+        text: fulfillmentText,
+        name: "Bot",
+        type: false,
+      );
+
+      setState(() {
+        _messages.insert(0, botMessage);
+      });
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,104 +106,109 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
+      body: Column(children: <Widget>[
+        Flexible(
             child: ListView.builder(
+              padding: EdgeInsets.all(8.0),
+              reverse: true,
+              itemBuilder: (_, int index) => _messages[index],
               itemCount: _messages.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: _messages[index]['isSent']
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width * 0.75),
-                        decoration: BoxDecoration(
-                          color: AppStyle.mainColor,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                            bottomLeft: _messages[index]['isSent']
-                                ? Radius.circular(10)
-                                : Radius.circular(0),
-                            bottomRight: _messages[index]['isSent']
-                                ? Radius.circular(0)
-                                : Radius.circular(10),
-                          ),
-                        ),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        child: Column(
-                          crossAxisAlignment: _messages[index]['isSent']
-                              ? CrossAxisAlignment.end
-                              : CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _messages[index]['message'],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              _messages[index]['time'],
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.7),
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
+            )),
+        Divider(height: 1.0),
+        Container(
+            decoration: BoxDecoration(color: Theme.of(context).cardColor),
+            child: IconTheme(
+              data: IconThemeData(color: Theme.of(context).accentColor),
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: <Widget>[
+                    Flexible(
+                      child: TextField(
+                        controller: _textController,
+                        onSubmitted: handleSubmitted,
+                        decoration: InputDecoration.collapsed(hintText: "Send a message"),
                       ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-          Container(
-            color: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _textController,
-                    decoration: InputDecoration(
-                      hintText: "Write a message",
-                      border: InputBorder.none,
                     ),
-                  ),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 4.0),
+                      child: IconButton(
+                        icon: Icon(Icons.send),
+                        onPressed: () => handleSubmitted(_textController.text),
+                      ),
+                    ),
+                  ],
                 ),
-                IconButton(
-                  onPressed: () {
-                    if (_textController.text.isNotEmpty) {
-                      setState(() {
-                        _messages.add({
-                          'message': _textController.text,
-                          'time':
-                              '${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
-                          'isSent': true,
-                        });
-                        _textController.clear();
-                      });
-                    }
-                  },
-                  icon: Icon(
-                    Icons.send,
-                    color: Color(0xFF1D9AAD),
-                  ),
-                ),
-              ],
+              ),
+            )
+        ),
+      ]),
+    );
+  }
+
+}
+
+class ChatMessage extends StatelessWidget {
+  ChatMessage({required this.text, required this.name, required this.type});
+
+  final String text;
+  final String name;
+  final bool type;
+
+  List<Widget> otherMessage(context) {
+    return <Widget>[
+      new Container(
+        margin: const EdgeInsets.only(right: 16.0),
+        child: CircleAvatar(child: new Text('B')),
+      ),
+      new Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(this.name,
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            Container(
+              margin: const EdgeInsets.only(top: 5.0),
+              child: Text(text),
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> myMessage(context) {
+    return <Widget>[
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Text(this.name, style: Theme.of(context).textTheme.subtitle1),
+            Container(
+              margin: const EdgeInsets.only(top: 5.0),
+              child: Text(text),
+            ),
+          ],
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.only(left: 16.0),
+        child: CircleAvatar(
+            child: Text(
+              this.name[0],
+              style: TextStyle(fontWeight: FontWeight.bold),
+            )),
+      ),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: this.type ? myMessage(context) : otherMessage(context),
       ),
     );
   }

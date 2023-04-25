@@ -4,7 +4,7 @@
             "outputFile": "com.example.capstone.app-mergeDebugResources-9:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "C:\\src\\capstone\\comp3901-project\\android\\app\\src\\main\\res\\values-night\\styles.xml",
+                    "source": "D:\\Documents\\UWI\\CAPSTONE PROJECT\\copynewcapstone\\comp3901-project\\android\\app\\src\\main\\res\\values-night\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",

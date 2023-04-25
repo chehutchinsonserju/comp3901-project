@@ -1,4 +1,4 @@
-#Sat Apr 01 20:12:48 COT 2023
-base.0=C\:\\src\\capstone\\comp3901-project\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
-renamed.0=classes.dex
+#Tue Apr 25 12:16:28 COT 2023
+base.0=D\:\\Documents\\UWI\\CAPSTONE PROJECT\\copynewcapstone\\comp3901-project\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 path.0=classes.dex
+renamed.0=classes.dex
