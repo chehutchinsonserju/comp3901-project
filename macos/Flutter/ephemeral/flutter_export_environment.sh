@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=C:\Users\nasha\OneDrive\Desktop\Folders\Coding\Flutter"
-export "FLUTTER_APPLICATION_PATH=C:\Users\nasha\OneDrive\Desktop\Folders\Coding\capstone"
+export "FLUTTER_ROOT=D:\Documents\flutter"
+export "FLUTTER_APPLICATION_PATH=D:\Documents\UWI\CAPSTONE PROJECT\copynewcapstone\comp3901-project"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=0.1.0"

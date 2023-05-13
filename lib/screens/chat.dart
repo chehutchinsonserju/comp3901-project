@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:dialogflow_grpc/dialogflow_grpc.dart';
 import 'package:dialogflow_grpc/generated/google/cloud/dialogflow/v2beta1/session.pb.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 late DialogflowGrpcV2Beta1 dialogflow;
 late String sessionId;
@@ -17,6 +20,8 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _textController = TextEditingController();
   final List<ChatMessage> _messages = <ChatMessage>[];
+  User? _user;
+
 
 
   @override
@@ -33,6 +38,9 @@ class _ChatScreenState extends State<ChatScreen> {
         '${(await rootBundle.loadString('assets/credentials.json'))}');
     // Create a DialogflowGrpc Instance
     dialogflow = DialogflowGrpcV2Beta1.viaServiceAccount(serviceAccount);
+
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
 
   }
 
@@ -62,6 +70,15 @@ class _ChatScreenState extends State<ChatScreen> {
 
       setState(() {
         _messages.insert(0, botMessage);
+      });
+
+      _user = FirebaseAuth.instance.currentUser;
+      CollectionReference collRef = FirebaseFirestore.instance.collection('response');
+      collRef.add({
+        'client_id': _user?.uid,
+        'responseText': data.queryResult.queryText,
+        'sentimentscore':data.queryResult.sentimentAnalysisResult.queryTextSentiment.score,
+
       });
     }
 

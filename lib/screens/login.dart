@@ -2,6 +2,12 @@ import 'package:capstone/screens/journal.dart';
 import 'package:capstone/screens/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/style/app_style.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+final GoogleSignIn googleSignIn = GoogleSignIn();
+
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -54,14 +60,31 @@ class LoginScreen extends StatelessWidget {
                         MaterialStateProperty.all(Color(0xFF1D9AAD)),
                     padding: MaterialStateProperty.all(EdgeInsets.all(15.0)),
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => JournalScreen()));
+                  onPressed: () async {
+                    WidgetsFlutterBinding.ensureInitialized();
+                    await Firebase.initializeApp();
+                    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+                    final GoogleSignInAuthentication googleAuth =
+                    await googleUser!.authentication;
+                    final AuthCredential credential = GoogleAuthProvider.credential(
+                      accessToken: googleAuth.accessToken,
+                      idToken: googleAuth.idToken,
+                    );
+                    final UserCredential userCredential =
+                    await FirebaseAuth.instance.signInWithCredential(credential);
+                    final User? user = userCredential.user;
+                    if(user!= null){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => JournalScreen()));
+                    } else {
+                      print('Error Signing In');
+                    }
+
                   },
                   child: Text(
-                    "Login",
+                    "Sign in with Google",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,
