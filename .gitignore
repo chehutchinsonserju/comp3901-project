@@ -1,5 +1,5 @@
-credentials.json
-google-services.json
+assets/credentials.json
+android/app/google-services.json
 build/
 
 # Logs
