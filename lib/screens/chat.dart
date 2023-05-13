@@ -20,21 +20,21 @@ class _ChatScreenState extends State<ChatScreen> {
         onTap: (int index) {
           switch (index) {
             case 0:
-              Navigator.push(
+              Navigator.pushNamed(
                 context,
-                MaterialPageRoute(builder: (context) => JournalScreen()),
+                '/journal',
               );
               break;
             case 1:
-              Navigator.push(
+              Navigator.pushNamed(
                 context,
-                MaterialPageRoute(builder: (context) => JournalScreen()),
+                '/home',
               );
               break;
             case 2:
-              Navigator.push(
+              Navigator.pushNamed(
                 context,
-                MaterialPageRoute(builder: (context) => ChatScreen()),
+                '/chat',
               );
               break;
           }

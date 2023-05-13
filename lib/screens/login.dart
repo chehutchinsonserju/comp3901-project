@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:capstone/style/app_style.dart';
 import 'package:capstone/components/auth_service.dart';
 
+import 'home_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -36,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (user != null) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => JournalScreen()),
+        MaterialPageRoute(builder: (context) => HomeScreen()),
       );
     }
   }

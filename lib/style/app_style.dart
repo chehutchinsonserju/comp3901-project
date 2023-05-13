@@ -17,7 +17,7 @@ class AppStyle {
   ];
 
   static TextStyle mainTitle =
-      GoogleFonts.poppins(fontSize: 24.0, fontWeight: FontWeight.bold);
+      GoogleFonts.poppins(fontSize: 30.0, fontWeight: FontWeight.bold);
 
   static TextStyle mainContentTitle =
       GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600);

@@ -1,8 +1,13 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:capstone/screens/journal.dart';
 import 'package:capstone/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+
+import 'screens/chat.dart';
+import 'screens/home_screen.dart';
+//import 'firebase_options.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,8 +18,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: prefer_const_constructors
     return MaterialApp(
-      home: LoginScreen(),
+      home: HomeScreen(),
+      routes: {
+        '/home': (context) => HomeScreen(),
+        '/journal': (context) => JournalScreen(),
+        '/chat': (context) => ChatScreen()
+      },
     );
   }
 }

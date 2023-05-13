@@ -9,8 +9,10 @@ environment:
 dependencies:
   firebase_auth: ^4.4.0
   firebase_core: ^2.9.0
+  fl_chart: ^0.62.0
   flutter:
     sdk: flutter
+    
 
 dev_dependencies:
   flutter_test:
@@ -21,3 +23,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+      - assets/images/
