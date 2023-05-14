@@ -13,6 +13,7 @@ class HorizontalListWithImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      shrinkWrap: true,
       scrollDirection: Axis.horizontal,
       itemCount: options.length,
       itemBuilder: (context, index) {
@@ -21,6 +22,7 @@ class HorizontalListWithImage extends StatelessWidget {
           child: InkWell(
             onTap: () => onOptionSelected(options[index]),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 ClipOval(
                   child: Image.asset(

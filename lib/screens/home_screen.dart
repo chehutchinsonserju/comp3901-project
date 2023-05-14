@@ -99,7 +99,8 @@ class _HomeScreenState extends State<HomeScreen> {
               textAlign: TextAlign.left,
             ),
           ),
-          Expanded(child: MoodChart()),
+          SizedBox(height: 30),
+          Expanded(child: Center(child: MoodChart())),
           Center(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -121,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               BorderRadius.all(Radius.circular(30.0))))),
             ),
           ),
-          Center(
+          /* Center(
             child: ElevatedButton(
                 onPressed: () {
                   Navigator.pushNamed(
@@ -139,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius:
                             BorderRadius.all(Radius.circular(30.0))))),
           ),
-          SizedBox(height: 20.0),
+          SizedBox(height: 20.0), */
           Center(
             child: ElevatedButton(
                 onPressed: () {

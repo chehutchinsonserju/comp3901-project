@@ -12,6 +12,8 @@ dependencies:
   fl_chart: ^0.62.0
   flutter:
     sdk: flutter
+  flutter_contacts: ^1.1.6
+  url_launcher: ^6.1.11
     
 
 dev_dependencies:
