@@ -222,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             BorderRadius.all(Radius.circular(30.0))))),
           ),
           SizedBox(height: 20.0), */
-            Center(
+            /*Center(
               child: ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(
@@ -239,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       shape: RoundedRectangleBorder(
                           borderRadius:
                           BorderRadius.all(Radius.circular(30.0))))),
-            ),
+            ),*/
             SizedBox(height: 20.0),
           ],
       ),
