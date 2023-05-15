@@ -1,4 +1,5 @@
 import 'package:capstone/components/bottom_navigation_bar.dart';
+import 'package:capstone/components/sentiment.dart';
 import 'package:capstone/screens/journal.dart';
 import 'package:capstone/style/app_style.dart';
 import 'package:flutter/material.dart';
