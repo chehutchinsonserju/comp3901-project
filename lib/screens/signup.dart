@@ -25,6 +25,29 @@ Future<void> signUp(String email, String password) async {
   }
 }
 class SignUpScreen extends StatelessWidget {
+  void showSignUpSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Sign Up Successful'),
+          content: Text('Congratulations! You have successfully signed up.'),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                // Close the dialog and navigate to another screen if needed
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,6 +135,7 @@ class SignUpScreen extends StatelessWidget {
                   ),
                   onPressed: () {
                     signUp(_emailController.text,_passwordController.text);
+                    showSignUpSuccessDialog(context);
                   },
                   child: Text(
                     "Sign Up",

@@ -21,6 +21,29 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+
+  void _handleSignOut() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    GoogleSignIn _googleSignIn = GoogleSignIn();
+
+    try {
+      await _googleSignIn.signOut();
+      _googleSignIn = GoogleSignIn();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
+
+    } catch (error) {
+      print(error);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,27 +77,14 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0.0,
         title: Text(
           'Home',
-          style: TextStyle(color: AppStyle.mainColor, fontSize: 15),
+          style: TextStyle(color: Colors.white, fontSize: 15),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey,
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () async{
-              WidgetsFlutterBinding.ensureInitialized();
-              await Firebase.initializeApp();
-              final GoogleSignIn _googleSignIn = GoogleSignIn();
-              void _handleSignOut() async {
-                try {
-                  await _googleSignIn.disconnect();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
-                } catch (error) {
-                  print(error);
-                }
-              }
+
               _handleSignOut();// Add logout functionality here
             },
           ),

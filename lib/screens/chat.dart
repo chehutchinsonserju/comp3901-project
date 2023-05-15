@@ -27,6 +27,9 @@ class _ChatScreenState extends State<ChatScreen> {
   User? _user;
 
 
+  bool _showInfo = true;
+  String _infoMessage = "Start Chatting";
+  MaterialColor _color = Colors.blue;
 
   @override
   void initState() {
@@ -48,13 +51,43 @@ class _ChatScreenState extends State<ChatScreen> {
 
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
+    _user = FirebaseAuth.instance.currentUser;
 
-  }
+}
 
   void handleSubmitted(text) async{
     print(text);
     _textController.clear();
     _user = FirebaseAuth.instance.currentUser;
+
+
+    var snapshot = await FirebaseFirestore.instance.collection('response').orderBy('timestamp', descending: true).limit(5).get();
+    double sum = 0;
+    int count = 0;
+    for (var doc in snapshot.docs) {
+      var data = doc.data();
+
+      if(data['client_id']==_user?.uid){
+        var sentimentScore = data['sentimentscore'];
+        sum += sentimentScore;
+        count++;
+
+      }
+    }
+    double average = count > 0 ? sum/count : 0;
+
+    if (average >= 0.3) {
+      setState(() {
+        _color = Colors.lightGreen;
+        _infoMessage = "Recent Mood: Positive \n" + "Average Score: " + average.toStringAsFixed(2);
+      });
+    }else if(average <=-0.3){
+      _color = Colors.red;
+      _infoMessage = "Recent Mood: Negative \n" + "Average Score: " + average.toStringAsFixed(2);
+    }else{
+      _color = Colors.lightBlue;
+      _infoMessage = "Recent Mood: Neutral \n" + "Average Score: " + average.toStringAsFixed(2);
+    }
 
     ChatMessage message = ChatMessage(
       text: text,
@@ -93,6 +126,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       bottomNavigationBar: MyBottomNavigationBar(
         currentIndex: 2,
@@ -166,7 +200,25 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             )
         ),
-      ]),
+    // Floating widget for displaying info
+    Positioned(
+    top: 10.0,
+    right: 10.0,
+    child: AnimatedOpacity(
+    duration: Duration(milliseconds: 200),
+    opacity: _showInfo ? 1.0 : 0.0,
+    child: Container(
+    decoration: BoxDecoration(
+    color: _color,
+    borderRadius: BorderRadius.circular(8.0),
+    ),
+    padding: EdgeInsets.all(8.0),
+    child: Text(
+    _infoMessage,
+    style: TextStyle(color: Colors.white),
+    ),
+    ),
+    ))]),
     );
   }
 

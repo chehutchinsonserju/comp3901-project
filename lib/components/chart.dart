@@ -19,25 +19,25 @@ class MoodChart extends StatelessWidget {
       String text = '';
       switch (value.toInt()) {
         case 0:
-          text = 'Sun';
+          text = '1';
           break;
         case 1:
-          text = 'Mon';
+          text = '2';
           break;
         case 2:
-          text = 'Tue';
+          text = '3';
           break;
         case 3:
-          text = 'Wed';
+          text = '4';
           break;
         case 4:
-          text = 'Thurs';
+          text = '5';
           break;
         case 5:
-          text = 'Fri';
+          text = '6';
           break;
         case 6:
-          text = 'Sat';
+          text = '7';
           break;
       }
       return Text(
@@ -55,13 +55,13 @@ class MoodChart extends StatelessWidget {
       String text = '';
       switch (value.toInt()) {
         case -1:
-          text = 'Bad Mood';
+          text = 'Negative Mood';
           break;
         case 0:
           text = 'Neutral';
           break;
         case 1:
-          text = 'Good Mood';
+          text = 'Positive Mood';
           break;
       }
       return Text(

@@ -7,11 +7,43 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:capstone/components/auth_service.dart';
 
-final GoogleSignIn googleSignIn = GoogleSignIn();
 final TextEditingController _emailController = TextEditingController();
 final TextEditingController _passwordController = TextEditingController();
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+
+}
+class _LoginScreenState extends State<LoginScreen> {
+
+  void handleLogin() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    GoogleSignIn googleSignIn = GoogleSignIn();
+    googleSignIn = GoogleSignIn();
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleAuth =
+    await googleUser!.authentication;
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    final UserCredential userCredential =
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    final User? user = userCredential.user;
+    if(user!= null){
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => HomeScreen()));
+    } else {
+      print('Error Signing In');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,26 +142,7 @@ class LoginScreen extends StatelessWidget {
                     padding: MaterialStateProperty.all(EdgeInsets.all(15.0)),
                   ),
                   onPressed: () async {
-                    WidgetsFlutterBinding.ensureInitialized();
-                    await Firebase.initializeApp();
-                    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-                    final GoogleSignInAuthentication googleAuth =
-                    await googleUser!.authentication;
-                    final AuthCredential credential = GoogleAuthProvider.credential(
-                      accessToken: googleAuth.accessToken,
-                      idToken: googleAuth.idToken,
-                    );
-                    final UserCredential userCredential =
-                    await FirebaseAuth.instance.signInWithCredential(credential);
-                    final User? user = userCredential.user;
-                    if(user!= null){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomeScreen()));
-                    } else {
-                      print('Error Signing In');
-                    }
+                    handleLogin();
 
                   },
                   child: Text(
