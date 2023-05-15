@@ -1,6 +1,7 @@
 import 'package:capstone/components/bottom_navigation_bar.dart';
 import 'package:capstone/screens/journal.dart';
 import 'package:capstone/style/app_style.dart';
+import 'package:capstone/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dialogflow_grpc/dialogflow_grpc.dart';
 import 'package:dialogflow_grpc/generated/google/cloud/dialogflow/v2beta1/session.pb.dart';
@@ -13,6 +14,8 @@ late DialogflowGrpcV2Beta1 dialogflow;
 late String sessionId;
 
 class ChatScreen extends StatefulWidget {
+  const ChatScreen({Key? key}) : super(key: key);
+
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -44,14 +47,14 @@ class _ChatScreenState extends State<ChatScreen> {
 
   }
 
-  void handleSubmitted(text) async {
+  void handleSubmitted(text) async{
     print(text);
     _textController.clear();
-
+    _user = FirebaseAuth.instance.currentUser;
 
     ChatMessage message = ChatMessage(
       text: text,
-      name: "You",
+      name: _user?.displayName ?? "You",
       type: true,
     );
 
@@ -64,7 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
     if(fulfillmentText.isNotEmpty) {
       ChatMessage botMessage = ChatMessage(
         text: fulfillmentText,
-        name: "Bot",
+        name: "MindSpace",
         type: false,
       );
 
@@ -100,7 +103,7 @@ class _ChatScreenState extends State<ChatScreen> {
             case 1:
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => JournalScreen()),
+                MaterialPageRoute(builder: (context) => HomeScreen()),
               );
               break;
             case 2:
@@ -176,7 +179,8 @@ class ChatMessage extends StatelessWidget {
     return <Widget>[
       new Container(
         margin: const EdgeInsets.only(right: 16.0),
-        child: CircleAvatar(child: new Text('B')),
+        child: CircleAvatar( backgroundImage: AssetImage('assets/images/logo.png'),
+        backgroundColor: Colors.grey,),
       ),
       new Expanded(
         child: Column(

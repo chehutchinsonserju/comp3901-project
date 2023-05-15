@@ -1,6 +1,29 @@
 import 'package:capstone/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+final TextEditingController _emailController = TextEditingController();
+final TextEditingController _passwordController = TextEditingController();
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
+
+Future<void> signUp(String email, String password) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  try {
+    UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    // User account created successfully
+  } on FirebaseAuthException catch (e) {
+    print(e);
+  }
+}
 class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -12,6 +35,8 @@ class SignUpScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image.asset('assets/images/logo.png', height: 100),
+              SizedBox(height: 20.0),
               Text(
                 "Sign Up",
                 style: TextStyle(
@@ -22,6 +47,7 @@ class SignUpScreen extends StatelessWidget {
               ),
               SizedBox(height: 20.0),
               TextField(
+                controller: _emailController,
                 decoration: InputDecoration(
                   labelText: 'Email',
                   labelStyle: TextStyle(color: Colors.grey[800]),
@@ -48,6 +74,7 @@ class SignUpScreen extends StatelessWidget {
               ),
               SizedBox(height: 20.0),
               TextField(
+                controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -83,7 +110,9 @@ class SignUpScreen extends StatelessWidget {
                         MaterialStateProperty.all(Color(0xFF1D9AAD)),
                     padding: MaterialStateProperty.all(EdgeInsets.all(15.0)),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    signUp(_emailController.text,_passwordController.text);
+                  },
                   child: Text(
                     "Sign Up",
                     style: TextStyle(

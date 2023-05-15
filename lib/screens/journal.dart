@@ -3,7 +3,9 @@ import 'package:capstone/screens/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/style/app_style.dart';
 import 'package:capstone/model/list_model.dart';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../components/note_list_data.dart';
 import 'add_entry/add_entry.dart';
 
@@ -15,6 +17,20 @@ class JournalScreen extends StatefulWidget {
 }
 
 class _JournalScreenState extends State<JournalScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    initPlugin();
+  }
+  Future<void> initPlugin() async {
+
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    var snapshot = await FirebaseFirestore.instance.collection('journal').get();
+    NoteList.addFromFirestore(snapshot);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,21 +40,21 @@ class _JournalScreenState extends State<JournalScreen> {
         onTap: (int index) {
           switch (index) {
             case 0:
-              Navigator.push(
+              Navigator.pushNamed(
                 context,
-                MaterialPageRoute(builder: (context) => JournalScreen()),
+                '/journal',
               );
               break;
             case 1:
-              Navigator.push(
+              Navigator.pushNamed(
                 context,
-                MaterialPageRoute(builder: (context) => JournalScreen()),
+                '/home',
               );
               break;
             case 2:
-              Navigator.push(
+              Navigator.pushNamed(
                 context,
-                MaterialPageRoute(builder: (context) => ChatScreen()),
+                '/chat',
               );
               break;
           }

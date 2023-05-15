@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../model/list_model.dart';
 import '../screens/journal.dart';
 import '../style/app_style.dart';
+
+
 
 class NoteListData extends StatefulWidget {
   const NoteListData({
@@ -12,9 +16,13 @@ class NoteListData extends StatefulWidget {
 
   @override
   State<NoteListData> createState() => _NoteListDataState();
+
+
 }
 
 class _NoteListDataState extends State<NoteListData> {
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(

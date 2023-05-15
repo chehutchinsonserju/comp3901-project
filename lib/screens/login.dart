@@ -1,13 +1,15 @@
-import 'package:capstone/screens/journal.dart';
 import 'package:capstone/screens/signup.dart';
+import 'package:capstone/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/style/app_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:capstone/components/auth_service.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
-
+final TextEditingController _emailController = TextEditingController();
+final TextEditingController _passwordController = TextEditingController();
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -20,14 +22,17 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image.asset('assets/images/logo.png', height: 100),
+              SizedBox(height: 20.0),
               Text(
                 "Login",
                 style: AppStyle.mainTitle,
               ),
               SizedBox(height: 20.0),
               TextField(
+                controller: _emailController,
                 decoration: InputDecoration(
-                  labelText: 'Username',
+                  labelText: 'Email',
                   labelStyle: TextStyle(color: Colors.grey[800]),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey[800]!),
@@ -39,6 +44,7 @@ class LoginScreen extends StatelessWidget {
               ),
               SizedBox(height: 20.0),
               TextField(
+                controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -52,6 +58,49 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20.0),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                    MaterialStateProperty.all(Color(0x407CFC00)),
+                    padding: MaterialStateProperty.all(EdgeInsets.all(15.0)),
+                  ),
+                  onPressed: () async {
+                    WidgetsFlutterBinding.ensureInitialized();
+                    await Firebase.initializeApp();
+                    final AuthService _authService = AuthService();
+                    User? user = await _authService.loginUsingEmailPassword(
+                      email: _emailController.text,
+                      password: _passwordController.text,
+                    );
+
+                    if(user!= null){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen()));
+                    } else {
+                      print('Error Signing In');
+                    }
+
+                  },
+                  child: Text(
+                    "Sign in",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10.0),
+              Text(
+                "or",
+                style: AppStyle.mainTitle,
+              ),
+              SizedBox(height: 10.0),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -77,7 +126,7 @@ class LoginScreen extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => JournalScreen()));
+                              builder: (context) => HomeScreen()));
                     } else {
                       print('Error Signing In');
                     }
