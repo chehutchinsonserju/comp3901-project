@@ -40,9 +40,9 @@ class _JournalScreenState extends State<JournalScreen> {
         onTap: (int index) {
           switch (index) {
             case 0:
-              Navigator.pushNamed(
+              Navigator.push(
                 context,
-                '/journal',
+                MaterialPageRoute(builder: (context) => JournalScreen()),
               );
               break;
             case 1:
