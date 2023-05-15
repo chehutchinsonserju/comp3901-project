@@ -14,7 +14,8 @@ late DialogflowGrpcV2Beta1 dialogflow;
 late String sessionId;
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+  final String? message;
+  const ChatScreen({Key? key, this.message}) : super(key: key);
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -31,6 +32,9 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     initPlugin();
+    if(widget.message != null){
+      handleSubmitted(widget.message);
+    }
   }
 
   Future<void> initPlugin() async {
@@ -81,7 +85,7 @@ class _ChatScreenState extends State<ChatScreen> {
         'client_id': _user?.uid,
         'responseText': data.queryResult.queryText,
         'sentimentscore':data.queryResult.sentimentAnalysisResult.queryTextSentiment.score,
-
+        'timestamp': FieldValue.serverTimestamp(),
       });
     }
 

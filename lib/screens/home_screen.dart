@@ -1,13 +1,17 @@
 // ignore_for_file: prefer_const_constructors
-
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:capstone/components/bottom_navigation_bar.dart';
 import 'package:capstone/screens/journal.dart';
 import 'package:capstone/screens/chat.dart';
+import 'package:capstone/screens/login.dart';
 import 'package:capstone/style/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../components/chart.dart';
 import '../components/image_list.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -53,6 +57,28 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(color: AppStyle.mainColor, fontSize: 15),
         ),
         backgroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () async{
+              WidgetsFlutterBinding.ensureInitialized();
+              await Firebase.initializeApp();
+              final GoogleSignIn _googleSignIn = GoogleSignIn();
+              void _handleSignOut() async {
+                try {
+                  await _googleSignIn.disconnect();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                  );
+                } catch (error) {
+                  print(error);
+                }
+              }
+              _handleSignOut();// Add logout functionality here
+            },
+          ),
+        ],
       ),
       body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,25 +131,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     case 'anxiety':
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ChatScreen()),
+                        MaterialPageRoute(builder: (context) => ChatScreen(message: 'I am feeling anxious right now')),
                       );
                       break;
                     case 'happiness':
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ChatScreen()),
+                        MaterialPageRoute(builder: (context) => ChatScreen(message: 'I am feeling happy right now')),
                       );
                       break;
                     case 'anger':
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ChatScreen()),
+                        MaterialPageRoute(builder: (context) => ChatScreen(message: 'I am feeling angry right now')),
                       );
                       break;
                     case 'stress':
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ChatScreen()),
+                        MaterialPageRoute(builder: (context) => ChatScreen(message: 'I am feeling stressed right now')),
                       );
                       break;
                     default:
@@ -133,40 +159,41 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Text(
-              "Here’s How I’ve Noticed Your Mood has Been",
-              style: TextStyle(
-                  color: AppStyle.accentColor,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400),
-              textAlign: TextAlign.left,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Text(
+                "Here’s How I’ve Noticed Your Mood has Been",
+                style: TextStyle(
+                    color: AppStyle.accentColor,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400),
+                textAlign: TextAlign.left,
+              ),
             ),
-          ),
-          Expanded(child: MoodChart()),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/chat',
-                    );
-                  },
-                  child: Text('Start a chat session...'),
-                  style: TextButton.styleFrom(
-                      backgroundColor: AppStyle.accentColor,
-                      foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 60.0, vertical: 25.0),
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(30.0))))),
+            SizedBox(height: 30),
+            Expanded(child: Center(child: MoodChart())),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/chat',
+                      );
+                    },
+                    child: Text('Start a chat session...'),
+                    style: TextButton.styleFrom(
+                        backgroundColor: AppStyle.accentColor,
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 60.0, vertical: 25.0),
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(30.0))))),
+              ),
             ),
-          ),
-          Center(
+            /* Center(
             child: ElevatedButton(
                 onPressed: () {
                   Navigator.pushNamed(
@@ -179,33 +206,33 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: AppStyle.accentColor,
                     foregroundColor: Colors.white,
                     padding:
-                    EdgeInsets.symmetric(horizontal: 60.0, vertical: 25.0),
+                        EdgeInsets.symmetric(horizontal: 60.0, vertical: 25.0),
                     shape: RoundedRectangleBorder(
                         borderRadius:
-                        BorderRadius.all(Radius.circular(30.0))))),
+                            BorderRadius.all(Radius.circular(30.0))))),
           ),
-          SizedBox(height: 20.0),
-          Center(
-            child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/chat',
-                  );
-                },
-                child: Text('SOS'),
-                style: TextButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                    padding:
-                    EdgeInsets.symmetric(horizontal: 110.0, vertical: 25.0),
-                    shape: RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(30.0))))),
-          ),
-          SizedBox(height: 20.0),
-    ],
-    ),
+          SizedBox(height: 20.0), */
+            Center(
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/chat',
+                    );
+                  },
+                  child: Text('SOS'),
+                  style: TextButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      padding:
+                      EdgeInsets.symmetric(horizontal: 110.0, vertical: 25.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(30.0))))),
+            ),
+            SizedBox(height: 20.0),
+          ],
+      ),
     );
   }
 }

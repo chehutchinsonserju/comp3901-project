@@ -24,18 +24,10 @@ class NoteList {
 
 
   static List<NoteContent> noteContent = [
-    NoteContent(
-        title: 'Made A New Friend',
-        description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        color: AppStyle.cardColors[Random().nextInt(7)]),
-    NoteContent(
-        title: 'Had a tough day',
-        description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        color: AppStyle.cardColors[Random().nextInt(7)])
+
   ];
   static void addFromFirestore(QuerySnapshot<Map<String, dynamic>> snapshot) {
+    noteContent.clear();
     _user = FirebaseAuth.instance.currentUser;
     for (var doc in snapshot.docs) {
       var data = doc.data();
@@ -43,10 +35,6 @@ class NoteList {
         var item = NoteContent(title: data['journalTitle'], description: data['journalDescription'], color: AppStyle.cardColors[Random().nextInt(7)]);
         noteContent.add(item);
       }
-
     }
   }
-
-
-
 }
